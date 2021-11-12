@@ -46,8 +46,8 @@ int checkButtonTwo(void) {
 
 void Buzz(void) {
     j = 0;
-    while (j < 1e3 && (1-checkButtonOne()) && (1-checkButtonTwo())) {
-        for (i = 0; i < 3e1; i++) {}
+    while (j < 3e3 && (1-checkButtonOne()) && (1-checkButtonTwo())) {
+        for (i = 0; i < 2e1; i++) {}
         if (BUZZER_FLAG == 0) {
             *pGPIODATA_PortF &= ~0x04;
             BUZZER_FLAG = 1;
