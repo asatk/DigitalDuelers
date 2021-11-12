@@ -146,3 +146,73 @@ int main(void) {
         }
     }
 }
+
+
+/**
+ * main.c
+ */
+
+#include <time.h>
+#include <stdlib.h>
+
+int state;
+
+int[] score;
+
+void wait(int buffer);
+bool checkButtonOne(void);
+bool checkButtonTwo(void);
+void Buzz(void); // flash it on and off very fast, like wait 10 before turning on and off
+void LEDOneOn(void);
+void LEDOneOff(void);
+void LEDTwoOn(void);
+void LEDTwoOff(void);
+void flashOne(void);
+void flashTwo(void);
+
+int main(void)
+{
+    srand(time(NULL));
+    while (score[0] < 5 && score[1] < 5) {
+        wait(100000);
+        premature = false;
+        int r = 1e5 * (rand() % 8);
+        for (int i = 0; i < r; i++) {
+            if (checkButtonOne()) {
+                score[1] += 1;
+                LEDTwoOn();
+                premature = true;
+                // player 1 loses
+            } else if (checkButtonTwo()) {
+                score[0] += 1;
+                LEDOneOn();
+                premature = true;
+                // player 2 loses
+            }
+        }
+        if (premature) {
+            continue;
+        }
+        Buzz() // make buzzer buzz
+        while (!checkButtonOne() || !checkButtonTwo()) {
+            Buzz();
+        }
+        if (checkButtonOne()) {
+            score[0] += 1;
+            LEDOneOn();
+            // player 1 wins
+        } else if (checkButtonTwo()) {
+            score[1] += 1;
+            LEDTwoOn();
+            // player two wins
+        }
+    }
+    if (score[0] == 5) {
+        flashOne();
+    } else {
+        flashTwo();
+    }
+
+    return 0;
+}
+
