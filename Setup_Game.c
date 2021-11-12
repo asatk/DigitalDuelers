@@ -24,20 +24,20 @@ void Setup_Game(void) {
     *pGPIOCR_PortF |= 0x0F;
 
     //set PE[0:1,3] for input
-    *pGPIODIR_PortE &= ~0x13;
+    *pGPIODIR_PortE &= ~0x0B;
 
     //set pull down resistor for input mode
-    *pGPIOPDR_PortE |= 0x13;
+    *pGPIOPDR_PortE |= 0x0B;
 
     //set PF[0:2] for output
     *pGPIODIR_PortF |= 0x07;
 
     // Step 4:  Set the pins to be used as a general purpose I/O pin.
-    *pGPIOAFSEL_PortE &= ~0x13;
+    *pGPIOAFSEL_PortE &= ~0x0B;
     *pGPIOAFSEL_PortF &= ~0x07;
 
     // Step 5:  Enable the pins
-    *pGPIODEN_PortE |= 0x13;
+    *pGPIODEN_PortE |= 0x0B;
     *pGPIODEN_PortF |= 0x07;
 }
 

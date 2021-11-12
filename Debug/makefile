@@ -2,14 +2,14 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
-SHELL = cmd.exe
-
-CG_TOOL_ROOT := C:/ti/ccs1020/ccs/tools/compiler/ti-cgt-arm_20.2.2.LTS
+CG_TOOL_ROOT := /home/asatk/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS
 
 GEN_OPTS__FLAG := 
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
+"./GPIO_registers.obj" \
+"./Setup_Game.obj" \
 "./main.obj" \
 "./tm4c1237h6pm_startup_ccs.obj" \
 "../tm4c1237h6pm.cmd" \
@@ -18,8 +18,8 @@ $(GEN_CMDS__FLAG) \
 
 -include ../makefile.init
 
-RM := DEL /F
-RMDIR := RMDIR /S/Q
+RM := rm -rf
+RMDIR := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
@@ -141,22 +141,22 @@ all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 DigitalDuelers.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: Arm Linker'
-	"C:/ti/ccs1020/ccs/tools/compiler/ti-cgt-arm_20.2.2.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --define=ccs="ccs" --define=PART_TM4C1237H6PM -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi -z -m"DigitalDuelers.map" --heap_size=0 --stack_size=512 -i"C:/ti/ccs1020/ccs/tools/compiler/ti-cgt-arm_20.2.2.LTS/lib" -i"C:/ti/ccs1020/ccs/tools/compiler/ti-cgt-arm_20.2.2.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="DigitalDuelers_linkInfo.xml" --rom_model -o "DigitalDuelers.out" $(ORDERED_OBJS)
+	"/home/asatk/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --define=ccs="ccs" --define=PART_TM4C1237H6PM -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi -z -m"DigitalDuelers.map" --heap_size=0 --stack_size=512 -i"/home/asatk/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/lib" -i"/home/asatk/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="DigitalDuelers_linkInfo.xml" --rom_model -o "DigitalDuelers.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
 DigitalDuelers.hex: $(EXE_OUTPUTS)
-	@echo 'Building files: $(strip $(EXE_OUTPUTS__QUOTED))'
+	@echo 'Building secondary target: "$@"'
 	@echo 'Invoking: Arm Hex Utility'
-	"C:/ti/ccs1020/ccs/tools/compiler/ti-cgt-arm_20.2.2.LTS/bin/armhex" --diag_wrap=off -o "DigitalDuelers.hex" $(EXE_OUTPUTS__QUOTED)
-	@echo 'Finished building: $(strip $(EXE_OUTPUTS__QUOTED))'
+	"/home/asatk/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/bin/armhex" --diag_wrap=off -o "DigitalDuelers.hex" $(EXE_OUTPUTS__QUOTED)
+	@echo 'Finished building secondary target: "$@"'
 	@echo ' '
 
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "main.obj" "tm4c1237h6pm_startup_ccs.obj" 
-	-$(RM) "main.d" "tm4c1237h6pm_startup_ccs.d" 
+	-$(RM) "GPIO_registers.obj" "Setup_Game.obj" "main.obj" "tm4c1237h6pm_startup_ccs.obj" 
+	-$(RM) "GPIO_registers.d" "Setup_Game.d" "main.d" "tm4c1237h6pm_startup_ccs.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
