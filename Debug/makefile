@@ -119,34 +119,34 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-digital\ duelers.out \
+DigitalDuelers.out \
 
 EXE_OUTPUTS__QUOTED += \
-"digital duelers.out" \
+"DigitalDuelers.out" \
 
 BIN_OUTPUTS += \
-digital\ duelers.hex \
+DigitalDuelers.hex \
 
 BIN_OUTPUTS__QUOTED += \
-"digital duelers.hex" \
+"DigitalDuelers.hex" \
 
 
 # All Target
 all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
-	@$(MAKE) --no-print-directory -Onone "digital duelers.out"
+	@$(MAKE) --no-print-directory -Onone "DigitalDuelers.out"
 
 # Tool invocations
-digital\ duelers.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
+DigitalDuelers.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: Arm Linker'
-	"/home/asatk/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --define=ccs="ccs" --define=PART_TM4C1237H6PM -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi -z -m"digital duelers.map" --heap_size=0 --stack_size=512 -i"/home/asatk/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/lib" -i"/home/asatk/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="digital duelers_linkInfo.xml" --rom_model -o "digital duelers.out" $(ORDERED_OBJS)
+	"/home/asatk/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --define=ccs="ccs" --define=PART_TM4C1237H6PM -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi -z -m"DigitalDuelers.map" --heap_size=0 --stack_size=512 -i"/home/asatk/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/lib" -i"/home/asatk/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="DigitalDuelers_linkInfo.xml" --rom_model -o "DigitalDuelers.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
-digital\ duelers.hex: $(EXE_OUTPUTS)
+DigitalDuelers.hex: $(EXE_OUTPUTS)
 	@echo 'Building secondary target: "$@"'
 	@echo 'Invoking: Arm Hex Utility'
-	"/home/asatk/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/bin/armhex" --diag_wrap=off -o "digital duelers.hex" $(EXE_OUTPUTS__QUOTED)
+	"/home/asatk/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/bin/armhex" --diag_wrap=off -o "DigitalDuelers.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building secondary target: "$@"'
 	@echo ' '
 
