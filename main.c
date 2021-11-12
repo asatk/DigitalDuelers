@@ -5,43 +5,15 @@
 
 #include <stdlib.h>
 #include <time.h>
+#include "GPIO_registers.h"
 
 int score[2];
 int i;
 int j;
 
-// pRCGCGPIO is a pointer to the General-Purpose Input/Output Run Mode Clock
-// Gating Control Register (p 340)
-unsigned int volatile *pRCGCGPIO = (unsigned int *) (0x400FE000 + 0x608);
-
-// pGPIOLOCK_PortF is a pointer to the GPIO Lock register for port E (p 684)
-unsigned int volatile *pGPIOLOCK_PortE = (unsigned int *)(0x40024000 + 0x520);
-unsigned int volatile *pGPIOLOCK_PortF = (unsigned int *)(0x40025000 + 0x520);
-
-// pGPIOCR_PortF is a pointer to the GPIO Commit register for port E (p 685)
-unsigned int volatile *pGPIOCR_PortE = (unsigned int *)(0x40024000 + 0x524);
-unsigned int volatile *pGPIOCR_PortF = (unsigned int *)(0x40025000 + 0x524);
-
-// pGPIODIR_PortF is a pointer to the GPIO Direction register for port E (p 663)
-unsigned int volatile *pGPIODIR_PortE = (unsigned int *) (0x40024000 + 0x400);
-unsigned int volatile *pGPIODIR_PortF = (unsigned int *) (0x40025000 + 0x400);
-
-//pull up resistor for input
-unsigned int volatile *pGPIOPDR_PortE = (unsigned int *) (0x40024000 + 0x514);
-
-// pGPIOAFSEL is a pointer to the GPIO Alternate Function Select register for port E (p 672)
-unsigned int volatile *pGPIOAFSEL_PortE = (unsigned int *) (0x40024000 + 0x420);
-unsigned int volatile *pGPIOAFSEL_PortF = (unsigned int *) (0x40025000 + 0x420);
-
-// pGPIODEN is a pointer to the GPIO Digital Enable register for port E (p 683)
-unsigned int volatile *pGPIODEN_PortE = (unsigned int *) (0x40024000 + 0x51C);
-unsigned int volatile *pGPIODEN_PortF = (unsigned int *) (0x40025000 + 0x51C);
-
-// pGPIODATA is a pointer to the GPIO Data register for port E (p 662)
-unsigned int volatile *pGPIODATA_PortE = (unsigned int *) (0x40024000 + 0x3FC);
-unsigned int volatile *pGPIODATA_PortF = (unsigned int *) (0x40025000 + 0x3FC);
-
 char BUZZER_FLAG = 0;
+
+extern void Setup_Game(void);
 
 void wait(int buffer);
 int checkButtonOne(void);
@@ -163,7 +135,8 @@ void setup(void) {
 int main(void)
 {
     srand(time(NULL));
-    setup();
+//    setup();
+    Setup_Game();
     while (score[0] < 5 && score[1] < 5) {
         wait(2000000);
         int premature = 0;
@@ -172,12 +145,16 @@ int main(void)
             if (checkButtonOne()) {
                 score[1] += 1;
                 LEDTwoOn();
+                for (j = 0; j < 1e5; j++) {}
                 premature = 1;
+                break;
                 // player 1 loses
             } else if (checkButtonTwo()) {
                 score[0] += 1;
                 LEDOneOn();
                 premature = 1;
+                for (j = 0; j < 1e5; j++) {}
+                break;
                 // player 2 loses
             }
         }
