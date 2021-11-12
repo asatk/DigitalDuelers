@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+int[] score;
+
 // pRCGCGPIO is a pointer to the General-Purpose Input/Output Run Mode Clock
 // Gating Control Register (p 340)
 unsigned int volatile *pRCGCGPIO = (unsigned int *) (0x400FE000 + 0x608);
@@ -37,7 +39,80 @@ unsigned int volatile *pGPIODEN_PortF = (unsigned int *) (0x40025000 + 0x51C);
 unsigned int volatile *pGPIODATA_PortE = (unsigned int *) (0x40024000 + 0x3FC);
 unsigned int volatile *pGPIODATA_PortF = (unsigned int *) (0x40025000 + 0x3FC);
 
+char BUZZER_FLAG = 0;
 
+void wait(int buffer);
+bool checkButtonOne(void);
+bool checkButtonTwo(void);
+void Buzz(void);
+void LEDOneOn(void);
+void LEDOneOff(void);
+void LEDTwoOn(void);
+void LEDTwoOff(void);
+void flashOne(void);
+void flashTwo(void);
+
+void wait(int buffer) {
+    LEDOneOn();
+    LEDTwoOn();
+    for (int i = 0; i < buffer; i++) {}
+    LEDOneOff();
+    LEDTwoOff();
+}
+
+bool checkButtonOne(void) {
+    int read = *pGPIODATA_PortE;
+    return (read == 0x01) || (read == 0x03);
+}
+
+bool checkButtonTwo(void) {
+    int read = *pGPIODATA_PortE;
+    return (read == 0x02) || (read == 0x03);
+}
+
+void Buzz(void) {
+    if (BUZZER_FLAG == 0) {
+        *pGPIODATA_PortF &= ~0x04;
+        BUZZER_FLAG = 1;
+    } else {
+        *pGPIODATA_PortF |= 0x04;
+        BUZZER_FLAG = 0;
+    }
+}
+
+void LEDOneOn(void) {
+    *pGPIODATA_PortF |= 0x01;
+}
+
+void LEDTwoOn(void) {
+    *pGPIODATA_PortF |= 0x02;
+}
+
+void LEDOneOff(void) {
+    *pGPIODATA_PortF &= ~0x01;
+}
+
+void LEDTwoOff(void) {
+    *pGPIODATA_PortF &= ~0x02;
+}
+
+void flashOne(void) {
+    while(1) {
+        for (int i = 0; i < 1e4; i++) {}
+        LEDOneOn();
+        for (int i = 0; i < 1e4; i++) {}
+        LEDOneOff();
+    }
+}
+
+void flashTwo(void) {
+    while(1) {
+        for (int i = 0; i < 1e4; i++) {}
+        LEDTwoOn();
+        for (int i = 0; i < 1e4; i++) {}
+        LEDTwoOff();
+    }
+}
 
 void setup(void) {
     // Step 1a: Turn on the clocks for Ports E and F.
@@ -76,65 +151,6 @@ void setup(void) {
 
 }
 
-int main(void) {
-
-    //check is buzzer square wave is up or down
-    char BUZZER_FLAG = 1;
-
-    *pGPIODATA_PortF &= ~0x04;
-
-    while(1) {
-        int read = *pGPIODATA_PortE;
-
-        //PF0 (blue side button pressed)
-        if (read == 0x01)
-        {
-            *pGPIODATA_PortF |= 0x01;
-            *pGPIODATA_PortF &= ~0x02;
-        }
-        //PF1 (red side button pressed)
-        else if (read == 0x02)
-        {
-            *pGPIODATA_PortF |= 0x02;
-            *pGPIODATA_PortF &= ~0x01;
-        }
-        //PF2 (both buttons pressed)
-        else if (read == 0x03) {
-            int i = 0;
-            *pGPIODATA_PortF &= ~0x03;
-            if (BUZZER_FLAG) {
-                *pGPIODATA_PortF |= 0x04;
-                BUZZER_FLAG = 0;
-            } else {
-                *pGPIODATA_PortF &= ~0x04;
-                BUZZER_FLAG = 1;
-            }
-            for (i = 0; i < 2e1; i++) {}
-        }
-        //no buttons pressed
-        else
-        {
-            *pGPIODATA_PortF &= ~0x01;
-            *pGPIODATA_PortF &= ~0x02;
-        }
-    }
-}
-
-int state;
-
-int[] score;
-
-void wait(int buffer);
-bool checkButtonOne(void);
-bool checkButtonTwo(void);
-void Buzz(void); // flash it on and off very fast, like wait 10 before turning on and off
-void LEDOneOn(void);
-void LEDOneOff(void);
-void LEDTwoOn(void);
-void LEDTwoOff(void);
-void flashOne(void);
-void flashTwo(void);
-
 int main(void)
 {
     srand(time(NULL));
@@ -158,9 +174,9 @@ int main(void)
         if (premature) {
             continue;
         }
-        Buzz() // make buzzer buzz
         while (!checkButtonOne() || !checkButtonTwo()) {
             Buzz();
+            for (int i = 0; i < 2e1; i++) {}
         }
         if (checkButtonOne()) {
             score[0] += 1;
