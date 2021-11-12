@@ -8,6 +8,7 @@
 
 int score[2];
 int i;
+int j;
 
 // pRCGCGPIO is a pointer to the General-Purpose Input/Output Run Mode Clock
 // Gating Control Register (p 340)
@@ -72,12 +73,17 @@ int checkButtonTwo(void) {
 }
 
 void Buzz(void) {
-    if (BUZZER_FLAG == 0) {
-        *pGPIODATA_PortF &= ~0x04;
-        BUZZER_FLAG = 1;
-    } else {
-        *pGPIODATA_PortF |= 0x04;
-        BUZZER_FLAG = 0;
+    j = 0;
+    while (j < 1e3 && (1-checkButtonOne()) && (1-checkButtonTwo())) {
+        for (i = 0; i < 3e1; i++) {}
+        if (BUZZER_FLAG == 0) {
+            *pGPIODATA_PortF &= ~0x04;
+            BUZZER_FLAG = 1;
+        } else {
+            *pGPIODATA_PortF |= 0x04;
+            BUZZER_FLAG = 0;
+        }
+        j++;
     }
 }
 
@@ -98,6 +104,7 @@ void LEDTwoOff(void) {
 }
 
 void flashOne(void) {
+    LEDTwoOff();
     while(1) {
         for (i = 0; i < 1e4; i++) {}
         LEDOneOn();
@@ -107,6 +114,7 @@ void flashOne(void) {
 }
 
 void flashTwo(void) {
+    LEDOneOff();
     while(1) {
         for (i = 0; i < 1e4; i++) {}
         LEDTwoOn();
@@ -155,8 +163,9 @@ void setup(void) {
 int main(void)
 {
     srand(time(NULL));
+    setup();
     while (score[0] < 5 && score[1] < 5) {
-        wait(100000);
+        wait(2000000);
         int premature = 0;
         int r = 1e5 * (rand() % 8);
         for (i = 0; i < r; i++) {
@@ -175,17 +184,18 @@ int main(void)
         if (premature) {
             continue;
         }
-        while (!checkButtonOne() || !checkButtonTwo()) {
-            Buzz();
-            for (i = 0; i < 2e1; i++) {}
+        Buzz();
+        while ((1-checkButtonOne()) && (1-checkButtonTwo())) {
         }
         if (checkButtonOne()) {
             score[0] += 1;
             LEDOneOn();
+            for (i = 0; i < 1e5; i++) {}
             // player 1 wins
         } else if (checkButtonTwo()) {
             score[1] += 1;
             LEDTwoOn();
+            for (i = 0; i < 1e5; i++) {}
             // player two wins
         }
     }
