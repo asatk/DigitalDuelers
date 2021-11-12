@@ -6,7 +6,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-int[] score;
+int score[2];
+int i;
 
 // pRCGCGPIO is a pointer to the General-Purpose Input/Output Run Mode Clock
 // Gating Control Register (p 340)
@@ -42,8 +43,8 @@ unsigned int volatile *pGPIODATA_PortF = (unsigned int *) (0x40025000 + 0x3FC);
 char BUZZER_FLAG = 0;
 
 void wait(int buffer);
-bool checkButtonOne(void);
-bool checkButtonTwo(void);
+int checkButtonOne(void);
+int checkButtonTwo(void);
 void Buzz(void);
 void LEDOneOn(void);
 void LEDOneOff(void);
@@ -55,17 +56,17 @@ void flashTwo(void);
 void wait(int buffer) {
     LEDOneOn();
     LEDTwoOn();
-    for (int i = 0; i < buffer; i++) {}
+    for (i = 0; i < buffer; i++) {}
     LEDOneOff();
     LEDTwoOff();
 }
 
-bool checkButtonOne(void) {
+int checkButtonOne(void) {
     int read = *pGPIODATA_PortE;
     return (read == 0x01) || (read == 0x03);
 }
 
-bool checkButtonTwo(void) {
+int checkButtonTwo(void) {
     int read = *pGPIODATA_PortE;
     return (read == 0x02) || (read == 0x03);
 }
@@ -98,18 +99,18 @@ void LEDTwoOff(void) {
 
 void flashOne(void) {
     while(1) {
-        for (int i = 0; i < 1e4; i++) {}
+        for (i = 0; i < 1e4; i++) {}
         LEDOneOn();
-        for (int i = 0; i < 1e4; i++) {}
+        for (i = 0; i < 1e4; i++) {}
         LEDOneOff();
     }
 }
 
 void flashTwo(void) {
     while(1) {
-        for (int i = 0; i < 1e4; i++) {}
+        for (i = 0; i < 1e4; i++) {}
         LEDTwoOn();
-        for (int i = 0; i < 1e4; i++) {}
+        for (i = 0; i < 1e4; i++) {}
         LEDTwoOff();
     }
 }
@@ -156,18 +157,18 @@ int main(void)
     srand(time(NULL));
     while (score[0] < 5 && score[1] < 5) {
         wait(100000);
-        premature = false;
+        int premature = 0;
         int r = 1e5 * (rand() % 8);
-        for (int i = 0; i < r; i++) {
+        for (i = 0; i < r; i++) {
             if (checkButtonOne()) {
                 score[1] += 1;
                 LEDTwoOn();
-                premature = true;
+                premature = 1;
                 // player 1 loses
             } else if (checkButtonTwo()) {
                 score[0] += 1;
                 LEDOneOn();
-                premature = true;
+                premature = 1;
                 // player 2 loses
             }
         }
@@ -176,7 +177,7 @@ int main(void)
         }
         while (!checkButtonOne() || !checkButtonTwo()) {
             Buzz();
-            for (int i = 0; i < 2e1; i++) {}
+            for (i = 0; i < 2e1; i++) {}
         }
         if (checkButtonOne()) {
             score[0] += 1;
